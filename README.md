@@ -1,6 +1,6 @@
 # Apple iPhone 15 Pro Max Web App
 
-<img src="" width="auto"/>
+<img src="https://github.com/sulimanbadour1/Apple_Store/blob/main/src/app/assets/images/mockup/site.gif?raw=true" width="auto"/>
 
 A dynamic web application showcasing the features and design of the Apple iPhone 15 Pro Max using advanced web technologies.
 
