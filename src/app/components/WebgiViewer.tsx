@@ -25,12 +25,45 @@ import {
 import { scrollAnimation } from "../lib/scroll-animation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { on } from "events";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function WebgiViewer() {
+const WebgiViewer = forwardRef(({ props }: any, ref: any) => {
   const canvasRef = useRef(null);
+  const [viewerRef, setViewerRef] = useState(null);
+  const [targetRef, setTargetRef] = useState(null);
+  const [cameraRef, setCameraRef] = useState(null);
+  const [positionRef, setPositionRef] = useState(null);
+
+  useImperativeHandle(ref, () => ({
+    triggerPreview() {
+      if (props?.contentRef?.current?.style) {
+        props.contentRef.current.style.opacity = "0";
+      }
+      if (cameraRef && viewerRef && targetRef) {
+        gsap.to((cameraRef as any).position, {
+          // add type assertion to cameraRef
+          x: 1.9990061396,
+          y: 2.5864087265,
+          z: -17.1513550396,
+          duration: 2,
+          onUpdate: () => {
+            if (viewerRef) {
+              (viewerRef as any).setDirty(); // add type assertion to viewerRef
+              (cameraRef as any).positionTargetUpdated(true);
+            }
+          },
+        });
+        gsap.to(targetRef, {
+          x: -0.099355398,
+          y: 1.6169336678,
+          z: -0.0782657466,
+          duration: 2,
+        });
+      }
+    },
+  }));
+
   const memoizedScrollAnimation = useCallback(
     (position: any, target: any, onUpdate: any) => {
       if (position && target && onUpdate) {
@@ -46,12 +79,17 @@ function WebgiViewer() {
     const viewer = new ViewerApp({
       canvas: canvasRef.current ?? undefined,
     });
+    setViewerRef(viewer as any); // add type assertion to viewer
 
     // Add some plugins
     const manager = await viewer.addPlugin(AssetManagerPlugin);
     const camera = viewer.scene.activeCamera;
     const position = camera.position;
     const target = camera.target;
+
+    setCameraRef(camera as any);
+    setPositionRef(position as any);
+    setTargetRef(target as any);
 
     // // Add a popup(in HTML) with download progress when any asset is downloading.
     // await viewer.addPlugin(AssetManagerBasicPopupPlugin);
@@ -115,6 +153,6 @@ function WebgiViewer() {
       <canvas id="webgi-canvas" ref={canvasRef}></canvas>
     </div>
   );
-}
+});
 
 export default WebgiViewer;
