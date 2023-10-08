@@ -1,5 +1,7 @@
 # Apple iPhone 15 Pro Max Web App
 
+<img src="" width="auto"/>
+
 A dynamic web application showcasing the features and design of the Apple iPhone 15 Pro Max using advanced web technologies.
 
 ## Integration of Next.js with ThreeJS (WebGi) & GSAP for a 3D Animated Website
